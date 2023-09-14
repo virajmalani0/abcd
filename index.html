@@ -1,0 +1,173 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
+
+	<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/calendar.css">
+
+	<style type="text/css">
+		body {
+			background-color: #fafafa;
+			font-family: 'Roboto';
+		}
+
+		.btn-edit {
+			border: none;
+			background: transparent;
+		}
+	</style>
+</head>
+
+<body>
+	<!-- Button trigger modal -->
+	<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+		Launch demo modal
+	</button>
+
+	<!-- Modal -->
+	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+		aria-hidden="true">
+
+
+		<div class="container" style="background-color: #fff;">
+			<div class="justify-between page-header"
+				style="border: none; display: flex; justify-content: space-around; align-items: center;">
+				<div class="btn-group">
+					<button class="btn btn-default" data-calendar-nav="today" style="display: none;">Current Month</button>
+				</div>
+				<div class="btn-group" style="display: flex; align-items: center;">
+					<button data-calendar-nav="prev" class="btn-edit jqyc-prev-year" value="prev-btn">
+						<< </button>
+							<h3 class="month-name" style="margin: 0;"></h3>
+							<button data-calendar-nav="next" class="btn-edit jqyc-next-year"
+								value="next-btn">>></button>
+				</div>
+				<div class="btn-group">
+					<button class="btn btn-primary" data-calendar-view="year">Year</button>
+					<button class="btn btn-primary" data-calendar-view="month">Month</button>
+					<!-- <button class="btn btn-warning" data-calendar-view="week">Week</button>
+						<button class="btn btn-warning" data-calendar-view="day">Day</button> -->
+				</div>
+			</div>
+
+			<div class="row" style="display: flex; justify-content: space-around;">
+				<div id="calendar"></div>
+			</div>
+
+			<div class="clearfix"></div>
+			<br><br>
+			<div id="disqus_thread"></div>
+			<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+					Disqus.</a></noscript>
+
+			<div class="modal fade" id="events-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+				aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+							<h3 class="modal-title">Event</h3>
+						</div>
+						<div class="modal-body" style="height: 400px">
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+	<script type="text/javascript"
+		src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+	<script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script type="text/javascript"
+		src="https://cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.6/jstz.min.js"></script>
+	<script type="text/javascript" src="js/calendar.js"></script>
+	<script type="text/javascript" src="js/app.js"></script>
+
+	<script type="text/javascript">
+		$('.calendar').calendar();
+		// function openpopup() {
+		// 	var elements = document.getElementsByClassName('piyush');
+		// 	for (var i = 0; i < elements.length; i++) {
+		// 		elements[i].style.display = "block";
+		// 	}
+		// }
+		function openpopup(id) {
+			var elements = document.getElementsByClassName('date-active-modal' + id);
+			for (var i = 0; i < elements.length; i++) {
+				elements[i].style.display = "block";
+			}
+		}
+
+		var openTooltipId = null;
+
+		function jan(id, CurCell, d) {
+
+			debugger
+			if (CurCell == 1 || CurCell == 8 || CurCell == 15 || CurCell == 22 || CurCell == 29 || CurCell == 36) headerValue = "Monday";
+			else if (CurCell == 2 || CurCell == 9 || CurCell == 16 || CurCell == 23 || CurCell == 30 || CurCell == 37) headerValue = "Tuesday";
+			else if (CurCell == 3 || CurCell == 10 || CurCell == 17 || CurCell == 24 || CurCell == 31 || CurCell == 38) headerValue = "Wednesday";
+			else if (CurCell == 4 || CurCell == 11 || CurCell == 18 || CurCell == 25 || CurCell == 32 || CurCell == 39) headerValue = "Thursday";
+			else if (CurCell == 5 || CurCell == 12 || CurCell == 19 || CurCell == 26 || CurCell == 33 || CurCell == 40) headerValue = "Friday";
+			else if (CurCell == 6 || CurCell == 13 || CurCell == 20 || CurCell == 27 || CurCell == 34 || CurCell == 41) headerValue = "Saturday";
+			else if (CurCell == 7 || CurCell == 14 || CurCell == 21 || CurCell == 28 || CurCell == 35 || CurCell == 42) headerValue = "Sunday";
+			else headerValue = "";
+			if (openTooltipId === id) {
+				// If the tooltip is already open, close it
+				closeTooltip(id);
+			} else {
+				openTooltip(id, d, headerValue);
+			}
+
+			openpopup(id, d, headerValue);
+
+		}
+
+		function openTooltip(id, d, headerValue) {
+			debugger
+			var returnvalue = `
+        <div role="tooltip" class="date-active-modal${id} date-active-modal popover in popover-right bs-popover-right right bs3" style="width: 300px;">
+            <div class="popover-arrow arrow" style="top: 44px;"></div>
+            <div class="popover-content popover-body">
+                <div class="col-md-12 col-calendar ng-star-inserted">
+                    <p class="pop_year_day">${headerValue}.</p>
+                    <p class="pop_year_day_number">${d}</p>
+                    <div class="ng-star-inserted">
+                        <div class="ng-star-inserted">
+                            <div class="circle_day_color" style="background: rgb(0, 230, 0); border-color: rgb(128, 255, 128);"></div>
+                            <p class="pop_year_event_title">
+                                <span> 00:00 </span> Available
+                            </p>
+                        </div>
+                    </div>
+                    <div class="loader_popover_calendar" hidden=""></div>
+                </div>
+            </div>
+        </div>`;
+
+			closeTooltip(openTooltipId); // Close any open tooltip
+
+			// Open the tooltip
+			$("#date-deactive-modal" + id).closest('td').append(returnvalue);
+			$(".date-active-modal" + id).on("click", function (event) {
+				event.stopPropagation(); // Prevent click event from bubbling up
+			});
+			openTooltipId = id; // Update the open tooltip ID
+		}
+
+		function closeTooltip(id) {
+			$(".date-active-modal" + id).remove(); // Remove the tooltip
+			openTooltipId = null; // Reset the open tooltip ID
+		}
+	</script>
+</body>
+
+</html>
